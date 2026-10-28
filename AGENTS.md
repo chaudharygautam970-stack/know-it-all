@@ -20,7 +20,7 @@ The platform is built on four non-negotiable principles:
 
 - **Framework**: Next.js (App Router convention) with React 19
 - **Language**: TypeScript (`strict: true`)
-- **Styling**: Tailwind CSS with custom design tokens for statuses and surfaces
+- **Styling**: Tailwind CSS with custom design tokens for statuses, verification, and surfaces
 - **Runtime & Local Server**: Modern Node.js (`v24+`), using native `--experimental-strip-types` and native `node:test`
 - **Future Database / Auth (Phase 3+)**: Supabase PostgreSQL with Row Level Security (RLS) and Supabase Auth
 
@@ -36,30 +36,41 @@ intelligence-hub/
 ├── next.config.ts            # Security headers & content security policy
 ├── .env.example              # Safe environment variable template (no real secrets)
 ├── tests/                    # Automated test suites
-│   ├── domain-rules.test.ts  # Verification & copyright compliance unit tests
-│   └── sample-data.test.ts   # Demonstration dataset schema tests
+│   ├── domain-rules.test.ts  # Verification & copyright compliance unit tests (9 tests)
+│   └── sample-data.test.ts   # Demonstration dataset & slug routing tests (6 tests)
 └── src/
     ├── app/                  # Next.js App Router views
     │   ├── layout.tsx        # Global application shell & navigation
-    │   ├── page.tsx          # Homepage Intelligence Dashboard
-    │   ├── news/page.tsx     # General News feed
-    │   ├── ai-tech/page.tsx  # AI & Technology feed
-    │   ├── opportunities/page.tsx # Opportunity Discovery feed
-    │   ├── search/page.tsx   # Search & multi-facet filters
+    │   ├── page.tsx          # Homepage Overview Dashboard
+    │   ├── news/
+    │   │   ├── page.tsx      # General News & Policy feed
+    │   │   └── [slug]/page.tsx # News record detail page
+    │   ├── technology/
+    │   │   └── page.tsx      # AI & Technology Radar
+    │   ├── ai-tech/
+    │   │   └── page.tsx      # Alias pointing to /technology
+    │   ├── opportunities/
+    │   │   ├── page.tsx      # Opportunity Discovery feed
+    │   │   └── [slug]/page.tsx # Opportunity full specification detail page
+    │   ├── search/page.tsx   # Global search & multi-facet filters
     │   ├── saved/page.tsx    # Bookmarked items & notes
-    │   ├── login/page.tsx    # Auth placeholder (Phase 3 Supabase)
+    │   ├── login/page.tsx    # Auth placeholder (Phase 3 Supabase roadmap)
     │   ├── admin/page.tsx    # Verification & moderation console
     │   └── globals.css       # Global stylesheet & design tokens
     ├── components/
     │   ├── layout/           # Navbar, Footer, DemoBanner
-    │   └── ui/               # Badge, StatusIndicator, AttributionNotice, CorrectionNotice
+    │   └── ui/               # Badge, StatusIndicator, AttributionNotice, CorrectionNotice, BookmarkButton, NewsCard, OpportunityCard, EmptyState
     ├── lib/
+    │   ├── data/             # Centralized sample datasets
+    │   │   ├── news.ts
+    │   │   ├── technology.ts
+    │   │   └── opportunities.ts
     │   ├── design-system.ts  # Status calculation, date formatting, label maps
     │   ├── validation.ts     # Domain input validators
-    │   └── sample-data.ts    # Labelled sample demonstration data
+    │   └── sample-data.ts    # Central aggregator & slug lookup helpers
     ├── types/
     │   └── index.ts          # Core domain TypeScript definitions
-    └── server.js             # Standalone local HTTP server & API
+    └── server.js             # Standalone local HTTP server & REST API
 ```
 
 ---
@@ -81,8 +92,8 @@ intelligence-hub/
 - Never guarantee funding or eligibility to any user.
 
 ### Rule C: Phased Implementation Workflow
-1. **Phase 1**: Foundation, design system, layout, routes, and sample data. *(Current)*
-2. **Phase 2**: Complete interactive frontend with search, filters, and local bookmarks.
+1. **Phase 1**: Foundation, design system, layout, routes, and sample data. *(Completed)*
+2. **Phase 2**: Complete interactive frontend with search, filters, detail pages, and local bookmarks. *(Completed)*
 3. **Phase 3**: Supabase PostgreSQL database, Row Level Security, and Supabase Auth.
 4. **Phase 4**: Permitted RSS and API content ingestion pipelines.
 5. **Phase 5**: Administrative verification, moderation queues, and correction workflows.

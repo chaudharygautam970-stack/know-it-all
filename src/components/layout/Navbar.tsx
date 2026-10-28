@@ -1,48 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getSavedItemIds } from "../ui/BookmarkButton.tsx";
 
 interface NavbarProps {
   currentPath?: string;
-  savedCount?: number;
 }
 
-export function Navbar({ currentPath = "/", savedCount = 0 }: NavbarProps) {
+export function Navbar({ currentPath = "/" }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [savedCount, setSavedCount] = useState(0);
 
-  const navLinks = [
-    { label: "Dashboard", href: "/" },
-    { label: "General News", href: "/news" },
-    { label: "AI & Tech", href: "/ai-tech" },
+  useEffect(() => {
+    const updateCount = () => {
+      setSavedCount(getSavedItemIds().length);
+    };
+
+    updateCount();
+    window.addEventListener("intelligence_hub_storage_updated", updateCount);
+    window.addEventListener("storage", updateCount);
+
+    return () => {
+      window.removeEventListener("intelligence_hub_storage_updated", updateCount);
+      window.removeEventListener("storage", updateCount);
+    };
+  }, []);
+
+  const primaryNavLinks = [
+    { label: "Overview", href: "/" },
+    { label: "News", href: "/news" },
+    { label: "AI & Technology", href: "/technology" },
     { label: "Opportunities", href: "/opportunities" },
+    { label: "Saved Items", href: "/saved", badge: savedCount },
     { label: "Search", href: "/search" },
-    { label: "Saved", href: "/saved", badge: savedCount },
   ];
 
   return (
-    <header className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
+    <header className="bg-slate-950 text-slate-100 border-b border-slate-800 sticky top-0 z-30 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <a href="/" className="flex items-center gap-3 group focus:outline-none">
-          <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-indigo-700 transition-colors">
+        {/* Brand Logo & Name */}
+        <a href="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow group-hover:bg-indigo-500 transition-colors">
             IH
           </div>
           <div>
-            <span className="text-base font-bold text-slate-900 dark:text-slate-100 leading-tight block">
+            <span className="text-base font-bold text-white tracking-tight leading-tight block">
               Intelligence Hub
             </span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
-              Verified Intelligence & Opportunity Discovery
+            <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase hidden sm:block">
+              Discovery & Verification
             </span>
           </div>
         </a>
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-xs md:max-w-md mx-2">
+        {/* Global Search Control */}
+        <div className="flex-1 max-w-xs md:max-w-sm mx-2">
           <form action="/search" method="GET" className="relative">
             <input
               type="text"
               name="q"
-              placeholder="Search news, grants, schemes..."
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-slate-900 transition-all text-slate-900 dark:text-slate-100"
+              placeholder="Search intelligence & opportunities..."
+              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-100 placeholder-slate-400 transition-all"
             />
             <svg
               className="w-4 h-4 text-slate-400 absolute left-2.5 top-2"
@@ -61,23 +77,25 @@ export function Navbar({ currentPath = "/", savedCount = 0 }: NavbarProps) {
           </form>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Primary Navigation */}
         <nav className="hidden lg:flex items-center gap-1 text-xs font-medium">
-          {navLinks.map((link) => {
-            const isActive = currentPath === link.href;
+          {primaryNavLinks.map((link) => {
+            const isActive =
+              currentPath === link.href ||
+              (link.href === "/technology" && currentPath === "/ai-tech");
             return (
               <a
                 key={link.href}
                 href={link.href}
                 className={`px-3 py-2 rounded-md transition-colors ${
                   isActive
-                    ? "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold"
-                    : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    ? "bg-slate-800 text-white font-bold border border-slate-700"
+                    : "text-slate-300 hover:text-white hover:bg-slate-900"
                 }`}
               >
                 {link.label}
                 {link.badge !== undefined && link.badge > 0 && (
-                  <span className="ml-1.5 px-1.5 py-0.2 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-full text-[10px] font-bold">
+                  <span className="ml-1.5 px-1.5 py-0.2 bg-indigo-500 text-white rounded-full text-[10px] font-bold">
                     {link.badge}
                   </span>
                 )}
@@ -85,28 +103,31 @@ export function Navbar({ currentPath = "/", savedCount = 0 }: NavbarProps) {
             );
           })}
 
-          <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-2" aria-hidden="true" />
+          <div className="h-4 w-px bg-slate-800 mx-2" aria-hidden="true" />
 
-          <a
-            href="/admin"
-            className="px-3 py-2 rounded-md text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors font-semibold"
-          >
-            Admin
-          </a>
-
-          <a
-            href="/login"
-            className="ml-1 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-xs font-semibold transition-colors"
-          >
-            Sign In
-          </a>
+          {/* User Account Placeholder */}
+          <div className="flex items-center gap-2 pl-1">
+            <div
+              className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs text-slate-300 font-semibold"
+              title="Researcher Profile"
+              aria-label="User Profile"
+            >
+              RP
+            </div>
+            <a
+              href="/login"
+              className="text-slate-400 hover:text-slate-200 text-xs font-medium hidden xl:inline-block"
+            >
+              Sign In
+            </a>
+          </div>
         </nav>
 
-        {/* Mobile menu button */}
+        {/* Mobile Menu Button */}
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 rounded-md"
+          className="lg:hidden p-2 text-slate-300 hover:text-white rounded-md focus:outline-none"
           aria-label="Toggle navigation menu"
           aria-expanded={mobileMenuOpen}
         >
@@ -116,30 +137,31 @@ export function Navbar({ currentPath = "/", savedCount = 0 }: NavbarProps) {
         </button>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile Responsive Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-1 text-xs font-medium">
-          {navLinks.map((link) => (
+        <div className="lg:hidden border-t border-slate-800 bg-slate-950 px-4 py-3 space-y-1 text-xs font-medium">
+          {primaryNavLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="block py-2 px-3 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200"
+              className="flex items-center justify-between py-2.5 px-3 rounded text-slate-200 hover:bg-slate-900"
             >
-              {link.label}
+              <span>{link.label}</span>
+              {link.badge !== undefined && link.badge > 0 && (
+                <span className="px-1.5 py-0.2 bg-indigo-500 text-white rounded-full text-[10px] font-bold">
+                  {link.badge}
+                </span>
+              )}
             </a>
           ))}
-          <a
-            href="/admin"
-            className="block py-2 px-3 rounded text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40"
-          >
-            Admin Console
-          </a>
-          <a
-            href="/login"
-            className="block py-2 px-3 rounded font-bold text-indigo-600 dark:text-indigo-400"
-          >
-            Sign In (Phase 3 Supabase Auth)
-          </a>
+          <div className="pt-2 border-t border-slate-800">
+            <a
+              href="/login"
+              className="block py-2 px-3 rounded text-indigo-400 hover:bg-slate-900 font-semibold"
+            >
+              Researcher Account / Sign In
+            </a>
+          </div>
         </div>
       )}
     </header>

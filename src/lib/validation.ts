@@ -13,18 +13,46 @@ export interface ValidationResult {
   errors: string[];
 }
 
+const VALID_NEWS_CATEGORIES = [
+  "india",
+  "world",
+  "business",
+  "science",
+  "politics",
+  "environment",
+  "general",
+  "ai-tech",
+  "llm",
+  "agents",
+  "dev-tools",
+  "startups",
+  "research",
+];
+
+const VALID_OPPORTUNITY_TYPES = [
+  "scholarship",
+  "internship",
+  "grant",
+  "scheme",
+  "fellowship",
+];
+
 /**
  * Validates a News record against Section 5 News and Copyright Rules:
  * - Must have an original source URL
  * - Must have source attribution
  * - Must have a valid publication timestamp
- * - Must not omit required licensing or syndication flags
+ * - Must have a slug
  */
 export function validateNewsItem(item: Partial<NewsItem>): ValidationResult {
   const errors: string[] = [];
 
   if (!item.title || item.title.trim().length === 0) {
     errors.push("News title is required.");
+  }
+
+  if (!item.slug || item.slug.trim().length === 0) {
+    errors.push("News slug is required.");
   }
 
   if (!item.url || !isValidUrl(item.url)) {
@@ -43,8 +71,8 @@ export function validateNewsItem(item: Partial<NewsItem>): ValidationResult {
     errors.push("A valid publication timestamp (publishedAt) is required.");
   }
 
-  if (item.category !== "general" && item.category !== "ai-tech") {
-    errors.push("Category must be either 'general' or 'ai-tech'.");
+  if (!item.category || !VALID_NEWS_CATEGORIES.includes(item.category)) {
+    errors.push(`Category must be one of: ${VALID_NEWS_CATEGORIES.join(", ")}.`);
   }
 
   return {
@@ -66,6 +94,10 @@ export function validateOpportunity(item: Partial<Opportunity>): ValidationResul
     errors.push("Opportunity title is required.");
   }
 
+  if (!item.slug || item.slug.trim().length === 0) {
+    errors.push("Opportunity slug is required.");
+  }
+
   if (!item.providerName || item.providerName.trim().length === 0) {
     errors.push("Provider name is required.");
   }
@@ -74,9 +106,8 @@ export function validateOpportunity(item: Partial<Opportunity>): ValidationResul
     errors.push("A valid official source URL is required.");
   }
 
-  const validTypes = ["scholarship", "internship", "grant", "scheme"];
-  if (!item.opportunityType || !validTypes.includes(item.opportunityType)) {
-    errors.push(`opportunityType must be one of: ${validTypes.join(", ")}.`);
+  if (!item.opportunityType || !VALID_OPPORTUNITY_TYPES.includes(item.opportunityType)) {
+    errors.push(`opportunityType must be one of: ${VALID_OPPORTUNITY_TYPES.join(", ")}.`);
   }
 
   const validStatuses = ["open", "closing_soon", "closed", "unknown"];

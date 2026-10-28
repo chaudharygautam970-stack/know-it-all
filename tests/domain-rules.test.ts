@@ -57,6 +57,7 @@ describe("Domain Rules & Verification Standards", () => {
     it("should accept valid, properly attributed news items", () => {
       const validNews: Partial<NewsItem> = {
         title: "Open Source AI Safety Benchmark Released",
+        slug: "open-source-ai-safety-benchmark-released",
         url: "https://example-institute.org/reports/ai-safety-2026",
         category: "ai-tech",
         publishedAt: "2026-10-28T09:30:00Z",
@@ -97,6 +98,7 @@ describe("Domain Rules & Verification Standards", () => {
     it("should accept opportunities with explicit unknown fields", () => {
       const honestOpportunity: Partial<Opportunity> = {
         title: "Government Innovation Fellowship",
+        slug: "government-innovation-fellowship",
         providerName: "Department of Technology",
         sourceUrl: "https://tech.gov.example.org/fellowship",
         opportunityType: "grant",

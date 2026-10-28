@@ -1,200 +1,277 @@
 import React from "react";
-import { SAMPLE_NEWS_ITEMS, SAMPLE_OPPORTUNITIES } from "../lib/sample-data.ts";
+import {
+  SAMPLE_NEWS_ITEMS,
+  SAMPLE_TECH_ITEMS,
+  SAMPLE_OPPORTUNITIES,
+  getUrgentOpportunities,
+} from "../lib/sample-data.ts";
+import { NewsCard } from "../components/ui/NewsCard.tsx";
+import { OpportunityCard } from "../components/ui/OpportunityCard.tsx";
 import { StatusIndicator } from "../components/ui/StatusIndicator.tsx";
 import { VerificationBadge } from "../components/ui/Badge.tsx";
-import { AttributionNotice } from "../components/ui/AttributionNotice.tsx";
-import { CorrectionNotice } from "../components/ui/CorrectionNotice.tsx";
+import { formatRelativeTime, formatDateTime } from "../lib/design-system.ts";
 
 export default function HomePage() {
-  const opportunities = SAMPLE_OPPORTUNITIES;
-  const news = SAMPLE_NEWS_ITEMS;
-
-  const closingSoonCount = opportunities.filter((o) => o.status === "closing_soon").length;
-  const verifiedCount = opportunities.filter((o) => o.verification.status === "verified").length;
+  const urgentOpportunities = getUrgentOpportunities();
+  const featuredTech = SAMPLE_TECH_ITEMS.slice(0, 2);
+  const latestNews = SAMPLE_NEWS_ITEMS.slice(0, 4);
+  const featuredOpportunities = SAMPLE_OPPORTUNITIES.slice(0, 3);
 
   return (
-    <div className="space-y-6">
-      {/* Header section */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-4 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Intelligence & Opportunity Dashboard
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Verified scholarships, research grants, technology developments, and official schemes.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true" />
-            Phase 1 Foundation Active
-          </span>
-        </div>
-      </div>
-
-      {/* KPI Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-            Opportunities
-          </span>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{opportunities.length}</span>
-            <span className="text-xs text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded font-medium">
-              Cataloged
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">
-            Closing Soon
-          </span>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">{closingSoonCount}</span>
-            <span className="text-xs text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded font-medium">
-              &le; 7 Days
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
-            Verified Sources
-          </span>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{verifiedCount}</span>
-            <span className="text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-medium">
-              100% Attributed
-            </span>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-            News Indexed
-          </span>
-          <div className="mt-2 flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{news.length}</span>
-            <span className="text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded font-medium">
-              AI & General
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Urgent Closing Soon Alert Box */}
-      <section aria-labelledby="urgent-heading" className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4">
-        <div className="flex items-start gap-3">
-          <div className="p-2 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 rounded-lg">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h2 id="urgent-heading" className="text-sm font-semibold text-amber-900 dark:text-amber-200">
-              Urgent Deadlines — Closing Within 7 Days
-            </h2>
-            <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5">
-              Strict opportunity verification active. Deadlines are verified against primary provider documents.
-            </p>
-            <div className="mt-3 space-y-2">
-              {opportunities
-                .filter((o) => o.status === "closing_soon")
-                .map((opp) => (
-                  <div
-                    key={opp.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-amber-200 dark:border-amber-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
-                  >
-                    <div>
-                      <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{opp.title}</div>
-                      <div className="text-[11px] text-amber-800 dark:text-amber-300 mt-0.5">
-                        Deadline: {opp.deadline ? new Date(opp.deadline).toUTCString() : "Unspecified"} • Provider: {opp.providerName}
-                      </div>
-                    </div>
-                    <a
-                      href={opp.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-xs font-semibold text-center transition-colors shrink-0"
-                    >
-                      Official Source &rarr;
-                    </a>
-                  </div>
-                ))}
+    <div className="space-y-8">
+      {/* A. Dashboard Header */}
+      <section aria-labelledby="dashboard-overview-heading" className="space-y-4">
+        <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                Editorial Intelligence Platform
+              </span>
+              <h1 id="dashboard-overview-heading" className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+                Global Intelligence & Opportunity Radar
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl mt-1 leading-relaxed">
+                Centralized discovery for verified scholarships, research fellowships, technological breakthroughs, and official policy announcements.
+              </p>
             </div>
+
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                Live Demo Active
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Search Input & Quick Category Shortcuts */}
+        <div className="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <form action="/search" method="GET" className="relative">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search across all news, AI developments, grants, and scholarships..."
+              className="w-full pl-10 pr-24 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100"
+            />
+            <svg
+              className="w-5 h-5 text-slate-400 absolute left-3 top-2.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <button
+              type="submit"
+              className="absolute right-1.5 top-1.5 px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold transition-colors"
+            >
+              Search
+            </button>
+          </form>
+
+          <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+            <span className="font-semibold text-slate-700 dark:text-slate-300 mr-1">Quick Discovery:</span>
+            <a href="/opportunities?type=scholarship" className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium">
+              Scholarships
+            </a>
+            <a href="/opportunities?type=grant" className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium">
+              Research Grants
+            </a>
+            <a href="/technology?category=llm" className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium">
+              Large Language Models
+            </a>
+            <a href="/technology?category=agents" className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium">
+              AI Agents
+            </a>
+            <a href="/opportunities?type=scheme" className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium">
+              Government Schemes
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Highlights Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Latest Intelligence Feed Preview */}
-        <section aria-labelledby="latest-intel-heading" className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-            <h2 id="latest-intel-heading" className="text-sm font-bold text-slate-900 dark:text-slate-100">
-              Latest Attributed Intelligence
+      {/* F. Deadline Awareness (Time-Sensitive Opportunities) */}
+      <section aria-labelledby="urgent-deadlines-heading" className="bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4 sm:p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 rounded">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <h2 id="urgent-deadlines-heading" className="text-sm font-bold text-amber-950 dark:text-amber-100">
+                Deadline Awareness & Urgent Applications
+              </h2>
+              <p className="text-[11px] text-amber-800 dark:text-amber-300">
+                Opportunities with verified deadlines closing within the next 7 calendar days.
+              </p>
+            </div>
+          </div>
+          <a
+            href="/opportunities?status=closing_soon"
+            className="text-xs font-semibold text-amber-900 dark:text-amber-200 underline hover:no-underline"
+          >
+            View Closing Soon &rarr;
+          </a>
+        </div>
+
+        {urgentOpportunities.length === 0 ? (
+          <div className="p-4 bg-white dark:bg-slate-900 rounded-lg text-xs text-slate-500 text-center">
+            No opportunities in the current dataset are closing within 7 days.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {urgentOpportunities.map((opp) => (
+              <div
+                key={opp.id}
+                className="bg-white dark:bg-slate-900 p-3.5 rounded-lg border border-amber-200/80 dark:border-amber-900/40 flex flex-col justify-between gap-2 shadow-sm"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="font-bold uppercase text-amber-800 dark:text-amber-400">
+                      {opp.opportunityType}
+                    </span>
+                    <span className="text-rose-600 dark:text-rose-400 font-semibold">
+                      Closing: {formatDateTime(opp.deadline)}
+                    </span>
+                  </div>
+                  <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 mt-1">
+                    <a href={`/opportunities/${opp.slug}`} className="hover:text-indigo-600">
+                      {opp.title}
+                    </a>
+                  </h3>
+                  <div className="text-[11px] text-slate-500 mt-0.5">
+                    Provider: {opp.providerName} • 📍 {opp.region}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">
+                    {opp.fundingAmount || "Discretionary funding"}
+                  </span>
+                  <a
+                    href={`/opportunities/${opp.slug}`}
+                    className="font-bold text-amber-900 dark:text-amber-300 hover:underline"
+                  >
+                    View Details &rarr;
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* B. Featured Developments */}
+      <section aria-labelledby="featured-heading" className="space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+          <div>
+            <h2 id="featured-heading" className="text-base font-bold text-slate-900 dark:text-slate-100">
+              Featured Intelligence & Technology Highlights
             </h2>
-            <a href="/news" className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+            <p className="text-xs text-slate-500">
+              Priority research disclosures, benchmark standards, and strategic announcements.
+            </p>
+          </div>
+          <a href="/technology" className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+            View All Tech &rarr;
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {featuredTech.map((item) => (
+            <NewsCard key={item.id} item={item} />
+          ))}
+        </div>
+      </section>
+
+      {/* Split Grid: C. Latest News & D. AI Technology Radar */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* C. Latest News */}
+        <section aria-labelledby="latest-news-heading" className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+            <div>
+              <h2 id="latest-news-heading" className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Latest General & Policy News
+              </h2>
+              <p className="text-xs text-slate-500">Sourced reports, workforce funds, and economic pacts.</p>
+            </div>
+            <a href="/news" className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
               View All News &rarr;
             </a>
           </div>
 
-          <div className="space-y-4">
-            {news.slice(0, 3).map((item) => (
-              <article key={item.id} className="border-b border-slate-100 dark:border-slate-800 last:border-none pb-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                  {item.category === "ai-tech" ? "AI & Technology" : "General News"}
-                </span>
-                <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 mt-1">
-                  <a href={item.url} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600">
+          <div className="space-y-3">
+            {latestNews.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2"
+              >
+                <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="font-bold uppercase text-blue-600 dark:text-blue-400">
+                    {item.category}
+                  </span>
+                  <span>{formatRelativeTime(item.publishedAt)}</span>
+                </div>
+                <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-snug">
+                  <a href={`/news/${item.slug}`} className="hover:text-indigo-600">
                     {item.title}
                   </a>
                 </h3>
-                <CorrectionNotice corrections={item.correctionHistory} className="my-2" />
-                <AttributionNotice
-                  attribution={item.attribution}
-                  publishedAt={item.publishedAt}
-                  isLicensed={item.isLicensed}
-                  licensingNotes={item.licensingNotes}
-                />
-              </article>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">
+                  {item.excerpt}
+                </p>
+                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500">
+                  <span>Source: <strong>{item.attribution.sourceName}</strong></span>
+                  <a href={`/news/${item.slug}`} className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+                    Read &rarr;
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
-        {/* Featured Opportunities Preview */}
-        <section aria-labelledby="featured-opp-heading" className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-            <h2 id="featured-opp-heading" className="text-sm font-bold text-slate-900 dark:text-slate-100">
-              Featured Opportunities
-            </h2>
-            <a href="/opportunities" className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
-              Browse Catalog &rarr;
+        {/* D. AI & Technology Radar */}
+        <section aria-labelledby="ai-radar-heading" className="space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+            <div>
+              <h2 id="ai-radar-heading" className="text-base font-bold text-slate-900 dark:text-slate-100">
+                AI & Technology Radar
+              </h2>
+              <p className="text-xs text-slate-500">LLMs, agent compiler tools, photonics, and vector indices.</p>
+            </div>
+            <a href="/technology" className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+              Radar Index &rarr;
             </a>
           </div>
 
-          <div className="space-y-4">
-            {opportunities.slice(0, 3).map((opp) => (
-              <div key={opp.id} className="border-b border-slate-100 dark:border-slate-800 last:border-none pb-3 space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 uppercase">
-                    {opp.opportunityType}
+          <div className="space-y-3">
+            {SAMPLE_TECH_ITEMS.slice(2, 6).map((item) => (
+              <div
+                key={item.id}
+                className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2"
+              >
+                <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="font-bold uppercase text-purple-600 dark:text-purple-400">
+                    {item.category}
                   </span>
-                  <StatusIndicator status={opp.status} />
-                  <VerificationBadge status={opp.verification.status} evidenceUrl={opp.verification.evidenceUrl} />
+                  <span>{formatRelativeTime(item.publishedAt)}</span>
                 </div>
-                <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">{opp.title}</h3>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">{opp.description}</p>
-                <div className="text-[11px] text-slate-500 flex justify-between items-center">
-                  <span>Funding: <strong>{opp.fundingAmount || "Not explicitly stated"}</strong></span>
-                  <a
-                    href={opp.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
-                  >
-                    View Official Site &rarr;
+                <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-snug">
+                  <a href={`/news/${item.slug}`} className="hover:text-indigo-600">
+                    {item.title}
+                  </a>
+                </h3>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2">
+                  {item.excerpt}
+                </p>
+                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500">
+                  <span>Source: <strong>{item.attribution.sourceName}</strong></span>
+                  <a href={`/news/${item.slug}`} className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+                    View Details &rarr;
                   </a>
                 </div>
               </div>
@@ -202,6 +279,29 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+
+      {/* E. Opportunity Discovery Feed */}
+      <section aria-labelledby="featured-opps-heading" className="space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+          <div>
+            <h2 id="featured-opps-heading" className="text-base font-bold text-slate-900 dark:text-slate-100">
+              Verified Opportunity Registry
+            </h2>
+            <p className="text-xs text-slate-500">
+              Doctoral fellowships, seed grants, and government schemes with transparent verification.
+            </p>
+          </div>
+          <a href="/opportunities" className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+            View All Opportunities &rarr;
+          </a>
+        </div>
+
+        <div className="space-y-4">
+          {featuredOpportunities.map((opp) => (
+            <OpportunityCard key={opp.id} item={opp} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

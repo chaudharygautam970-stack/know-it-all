@@ -10,13 +10,27 @@
 // General Enums & Value Unions
 // ----------------------------------------------------------------------------
 
-export type NewsCategory = "general" | "ai-tech";
+export type NewsCategory =
+  | "india"
+  | "world"
+  | "business"
+  | "science"
+  | "politics"
+  | "environment"
+  | "general"
+  | "ai-tech"
+  | "llm"
+  | "agents"
+  | "dev-tools"
+  | "startups"
+  | "research";
 
 export type OpportunityType =
   | "scholarship"
   | "internship"
   | "grant"
-  | "scheme";
+  | "scheme"
+  | "fellowship";
 
 export type ProviderType =
   | "government"
@@ -77,33 +91,38 @@ export interface MaterialCorrection {
 
 export interface NewsItem {
   id: string;
+  slug: string;
   title: string;
-  url: string; // Original URL
+  url: string; // Original publisher link
   category: NewsCategory;
   attribution: SourceAttribution;
-  publishedAt: string; // Real publication timestamp (never fabricated)
-  discoveredAt: string; // When our platform indexed it
+  publishedAt: string; // Real publication timestamp
+  discoveredAt: string; // When indexed
+  excerpt?: string; // Authorized brief excerpt
   isLicensed: boolean;
   licensingNotes?: string | null;
   correctionHistory: MaterialCorrection[];
   tags: string[];
+  isDemo?: boolean;
 }
 
 export interface Opportunity {
   id: string;
+  slug: string;
   title: string;
   opportunityType: OpportunityType;
   providerName: string;
   providerType: ProviderType;
-  sourceUrl: string; // Direct link to official provider page
+  sourceUrl: string; // Direct link to official provider portal
+  region: string; // Country / State / Applicable geography
 
   // Explicit unknown or null fields (never invented)
   description: string;
   eligibilityCriteria: string | null;
-  isEligibilityExplicit: boolean; // True if provider explicitly gave criteria, false if unknown
+  isEligibilityExplicit: boolean; // True if provider explicitly stated criteria
 
   fundingAmount: string | null;
-  isFundingExplicit: boolean; // True if stated, false if unknown/discretionary
+  isFundingExplicit: boolean; // True if stated, false if discretionary/unknown
 
   deadline: string | null; // ISO 8601 string or null if ongoing/unspecified
   isDeadlineExplicit: boolean;
@@ -114,6 +133,7 @@ export interface Opportunity {
   tags: string[];
   createdAt: string;
   updatedAt: string;
+  isDemo?: boolean;
 }
 
 // ----------------------------------------------------------------------------
@@ -129,15 +149,14 @@ export interface UserProfile {
 
 export interface SavedItem {
   id: string;
-  userId: string;
   itemType: "news" | "opportunity";
   itemId: string;
+  slug: string;
+  title: string;
+  sourceName: string;
+  categoryOrType: string;
   savedAt: string;
   userNotes?: string | null;
-  // Snapshot data for quick offline/saved rendering
-  titleSnapshot: string;
-  sourceUrlSnapshot: string;
-  categoryOrTypeSnapshot: string;
 }
 
 // ----------------------------------------------------------------------------
@@ -146,11 +165,12 @@ export interface SavedItem {
 
 export interface FilterState {
   query: string;
-  section: "all" | "news" | "ai-tech" | "opportunities" | "saved";
+  section: "all" | "news" | "technology" | "opportunities" | "saved";
   opportunityTypes: OpportunityType[];
   providerTypes: ProviderType[];
   opportunityStatuses: OpportunityStatus[];
   verificationStatuses: VerificationStatus[];
+  regions: string[];
   sortBy: "latest" | "deadline_soonest" | "title";
 }
 

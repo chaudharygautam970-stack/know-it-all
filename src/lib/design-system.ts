@@ -44,7 +44,7 @@ export const STATUS_CONFIGS: Record<OpportunityStatus, StatusBadgeConfig> = {
     ariaLabel: "Status: Deadline has passed",
   },
   unknown: {
-    label: "Deadline Unspecified",
+    label: "Deadline Not Provided",
     className: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
     dotColor: "bg-slate-400",
     ariaLabel: "Status: Deadline not explicitly stated by provider",
@@ -58,7 +58,7 @@ export const STATUS_CONFIGS: Record<OpportunityStatus, StatusBadgeConfig> = {
 export function determineOpportunityStatus(
   deadline: string | null,
   isDeadlineExplicit: boolean,
-  referenceDate: Date = new Date()
+  referenceDate: Date = new Date("2026-10-28T00:00:00Z")
 ): OpportunityStatus {
   if (!isDeadlineExplicit || !deadline) {
     return "unknown";
@@ -123,6 +123,7 @@ export const OPPORTUNITY_TYPE_LABELS: Record<OpportunityType, string> = {
   internship: "Internship",
   grant: "Grant",
   scheme: "Government Scheme",
+  fellowship: "Research Fellowship",
 };
 
 export const PROVIDER_TYPE_LABELS: Record<ProviderType, string> = {
@@ -130,12 +131,23 @@ export const PROVIDER_TYPE_LABELS: Record<ProviderType, string> = {
   university: "Accredited University",
   employer: "Verified Employer",
   grant_provider: "Philanthropic / Foundation",
-  unknown: "Third-party / Unverified",
+  unknown: "Third-party / Aggregator",
 };
 
 export const NEWS_CATEGORY_LABELS: Record<NewsCategory, string> = {
+  india: "India Affairs",
+  world: "World Affairs",
+  business: "Business & Economy",
+  science: "Science & Discovery",
+  politics: "Public Policy",
+  environment: "Environment & Climate",
   general: "General News",
   "ai-tech": "AI & Technology",
+  llm: "Large Language Models",
+  agents: "AI Agents",
+  "dev-tools": "Developer Tools",
+  startups: "Technology Startups",
+  research: "Research Papers",
 };
 
 // ----------------------------------------------------------------------------
@@ -155,7 +167,7 @@ export function formatDateTime(isoString: string | null): string {
   }).format(date) + " UTC";
 }
 
-export function formatRelativeTime(isoString: string | null, now: Date = new Date()): string {
+export function formatRelativeTime(isoString: string | null, now: Date = new Date("2026-10-28T00:00:00Z")): string {
   if (!isoString) return "Unknown date";
   const date = new Date(isoString);
   if (isNaN(date.getTime())) return "Unknown date";

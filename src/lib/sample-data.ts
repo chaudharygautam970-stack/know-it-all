@@ -1,279 +1,96 @@
 /**
  * ============================================================================
- * Intelligence Hub — Demonstration & Sample Dataset
+ * Intelligence Hub — Centralized Demonstration & Sample Dataset
  * ============================================================================
- * IMPORTANT: This data is strictly for demonstration and testing purposes.
- * It is clearly flagged to prevent confusion with live production data.
- * All records strictly conform to the domain schemas in src/types/index.ts.
+ * Aggregates all verified sample records for News, Technology, and Opportunities.
+ * Exposes strict lookup and search helper utilities for UI detail pages.
  */
 
 import type { NewsItem, Opportunity } from "../types/index.ts";
+import { SAMPLE_NEWS_DATA } from "./data/news.ts";
+import { SAMPLE_TECH_DATA } from "./data/technology.ts";
+import { SAMPLE_OPPORTUNITIES_DATA } from "./data/opportunities.ts";
 
 export const IS_DEMO_DATA = true;
 export const DEMO_DATA_DISCLAIMER =
-  "DEMONSTRATION DATA MODE: All records below are simulated sample data for UI and workflow verification. Source links and publisher attributions demonstrate real-world citation formatting.";
+  "DEMONSTRATION DATA MODE: All records below are simulated sample data for testing and demonstration purposes. Sourcing standards and attribution links reflect real specifications.";
 
-export const SAMPLE_NEWS_ITEMS: NewsItem[] = [
-  {
-    id: "news-001",
-    title: "National Quantum Computing Initiative Announces Academic Research Grants",
-    url: "https://www.example.gov/science/quantum-initiative-2026",
-    category: "ai-tech",
-    attribution: {
-      sourceName: "National Science Foundation",
-      sourceUrl: "https://www.example.gov/science",
-      publisher: "Office of Science & Technology",
-      retrievedAt: "2026-10-28T08:00:00Z",
-      isSyndicated: false,
-    },
-    publishedAt: "2026-10-27T14:30:00Z",
-    discoveredAt: "2026-10-27T15:00:00Z",
-    isLicensed: true,
-    licensingNotes: "Public Domain U.S. Government Work",
-    tags: ["Quantum", "Research Grants", "Federal", "Physics"],
-    correctionHistory: [
-      {
-        id: "corr-news-1",
-        timestamp: "2026-10-27T18:00:00Z",
-        fieldChanged: "title",
-        previousValue: "National Quantum Initiative Announces Industry Grants",
-        newValue: "National Quantum Computing Initiative Announces Academic Research Grants",
-        reason: "Clarified that initial funding round is restricted to accredited academic research institutes.",
-        recordedBy: "admin_verifier_01",
-      },
-    ],
-  },
-  {
-    id: "news-002",
-    title: "Open Evaluation Standards Released for Autonomous Decision-Making Systems",
-    url: "https://www.example-standards.org/press/ai-safety-metrics-v2",
-    category: "ai-tech",
-    attribution: {
-      sourceName: "Global AI Safety Consortium",
-      sourceUrl: "https://www.example-standards.org",
-      publisher: "Consortium Press",
-      retrievedAt: "2026-10-28T09:15:00Z",
-      isSyndicated: true,
-      originalReportingUrl: "https://www.example-standards.org/reports/safety-benchmarks-2026",
-    },
-    publishedAt: "2026-10-28T07:45:00Z",
-    discoveredAt: "2026-10-28T08:00:00Z",
-    isLicensed: true,
-    licensingNotes: "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-    tags: ["AI Safety", "Benchmarks", "Standards", "Open Source"],
-    correctionHistory: [],
-  },
-  {
-    id: "news-003",
-    title: "International Renewable Energy Exchange Upgrades Grid Interconnection Protocols",
-    url: "https://www.example-energy.int/news/grid-modernization-october",
-    category: "general",
-    attribution: {
-      sourceName: "International Energy Exchange",
-      sourceUrl: "https://www.example-energy.int",
-      publisher: "Energy Secretariat",
-      retrievedAt: "2026-10-28T06:00:00Z",
-      isSyndicated: false,
-    },
-    publishedAt: "2026-10-26T12:00:00Z",
-    discoveredAt: "2026-10-26T13:30:00Z",
-    isLicensed: false,
-    licensingNotes: "Standard publisher copyright - fair use headline attribution",
-    tags: ["Clean Energy", "Infrastructure", "Global Policy"],
-    correctionHistory: [],
-  },
-  {
-    id: "news-004",
-    title: "Semiconductor Workforce Development Fund Expands Apprenticeship Allocations",
-    url: "https://www.example.gov/labor/chips-workforce-allocations",
-    category: "general",
-    attribution: {
-      sourceName: "Department of Labor",
-      sourceUrl: "https://www.example.gov/labor",
-      publisher: "Employment & Training Administration",
-      retrievedAt: "2026-10-28T04:20:00Z",
-      isSyndicated: false,
-    },
-    publishedAt: "2026-10-25T16:00:00Z",
-    discoveredAt: "2026-10-25T17:10:00Z",
-    isLicensed: true,
-    licensingNotes: "Public Domain Government Notice",
-    tags: ["Semiconductors", "Workforce", "Apprenticeships", "Economy"],
-    correctionHistory: [],
-  },
+export const SAMPLE_NEWS_ITEMS: NewsItem[] = SAMPLE_NEWS_DATA;
+export const SAMPLE_TECH_ITEMS: NewsItem[] = SAMPLE_TECH_DATA;
+export const SAMPLE_OPPORTUNITIES: Opportunity[] = SAMPLE_OPPORTUNITIES_DATA;
+
+export const ALL_SAMPLE_NEWS: NewsItem[] = [
+  ...SAMPLE_NEWS_DATA,
+  ...SAMPLE_TECH_DATA,
 ];
 
-export const SAMPLE_OPPORTUNITIES: Opportunity[] = [
-  {
-    id: "opp-001",
-    title: "Doctoral Research Fellowship in Safe Autonomous Systems",
-    opportunityType: "scholarship",
-    providerName: "Institute for Advanced Machine Learning",
-    providerType: "university",
-    sourceUrl: "https://www.example-uni.edu/admissions/fellowships/safe-ai-2027",
-    description: "Fully funded 3-year doctoral research stipend focusing on verification methods for machine learning models and formal guarantees.",
-    eligibilityCriteria: "Applicants must hold a Master's degree in Computer Science, Applied Mathematics, or a related discipline with demonstrated research experience.",
-    isEligibilityExplicit: true,
-    fundingAmount: "$48,000 / year stipend + full tuition waiver",
-    isFundingExplicit: true,
-    deadline: "2026-11-03T23:59:59Z", // Closing soon relative to late October
-    isDeadlineExplicit: true,
-    status: "closing_soon",
-    verification: {
-      status: "verified",
-      lastVerifiedAt: "2026-10-27T10:00:00Z",
-      verifiedBy: "moderator_lead",
-      evidenceUrl: "https://www.example-uni.edu/bulletins/verified-grants-2026.pdf",
-      notes: "Confirmed through university graduate admissions portal.",
-    },
-    correctionHistory: [],
-    tags: ["AI Research", "PhD", "Tuition Waiver", "Machine Learning"],
-    createdAt: "2026-10-15T09:00:00Z",
-    updatedAt: "2026-10-27T10:00:00Z",
-  },
-  {
-    id: "opp-002",
-    title: "National Small Business Green Technology Commercialization Grant",
-    opportunityType: "grant",
-    providerName: "Federal Department of Energy & Innovation",
-    providerType: "government",
-    sourceUrl: "https://www.example.gov/energy/sbir-phase1-green-tech",
-    description: "Early-stage non-dilutive seed capital for small enterprises deploying scalable decarbonization and grid-resilience technology solutions.",
-    eligibilityCriteria: "For-profit entities with fewer than 500 employees, majority locally owned, proposing novel clean-tech prototypes.",
-    isEligibilityExplicit: true,
-    fundingAmount: "Up to $275,000 for Phase I feasibility",
-    isFundingExplicit: true,
-    deadline: "2026-12-15T17:00:00Z", // Open (> 7 days)
-    isDeadlineExplicit: true,
-    status: "open",
-    verification: {
-      status: "verified",
-      lastVerifiedAt: "2026-10-26T14:30:00Z",
-      verifiedBy: "system_rss_crawler",
-      evidenceUrl: "https://www.example.gov/grants/feed-item-8829",
-      notes: "Official grant announcement indexed via approved federal API.",
-    },
-    correctionHistory: [],
-    tags: ["CleanTech", "Government Grant", "Small Business", "Non-Dilutive"],
-    createdAt: "2026-10-20T11:00:00Z",
-    updatedAt: "2026-10-26T14:30:00Z",
-  },
-  {
-    id: "opp-003",
-    title: "Undergraduate Systems & High-Performance Computing Summer Internship",
-    opportunityType: "internship",
-    providerName: "Cray Research Computing Laboratories",
-    providerType: "employer",
-    sourceUrl: "https://www.example-labs.com/careers/internships/systems-2027",
-    description: "12-week paid engineering internship working on parallel distributed storage architectures and kernel performance profiling.",
-    eligibilityCriteria: "Current undergraduate students pursuing computer science or computer engineering graduating between Dec 2027 and June 2028.",
-    isEligibilityExplicit: true,
-    fundingAmount: "$38.50 / hour + housing assistance stipend",
-    isFundingExplicit: true,
-    deadline: "2026-11-25T23:59:59Z",
-    isDeadlineExplicit: true,
-    status: "open",
-    verification: {
-      status: "verified",
-      lastVerifiedAt: "2026-10-28T07:00:00Z",
-      verifiedBy: "moderator_tech",
-      evidenceUrl: "https://www.example-labs.com/careers/verified-roles.json",
-      notes: "Verified against direct employer career portal posting.",
-    },
-    correctionHistory: [],
-    tags: ["Summer 2027", "HPC", "Systems", "Paid Internship"],
-    createdAt: "2026-10-18T13:00:00Z",
-    updatedAt: "2026-10-28T07:00:00Z",
-  },
-  {
-    id: "opp-004",
-    title: "Agricultural Micro-Irrigation Modernization Scheme",
-    opportunityType: "scheme",
-    providerName: "State Department of Rural Development",
-    providerType: "government",
-    sourceUrl: "https://www.example.gov/agriculture/schemes/drip-subsidy",
-    description: "Capital subsidy program for farmers implementing sensor-assisted micro-irrigation and water conservation mechanisms.",
-    eligibilityCriteria: null, // EXPLICIT UNKNOWN: Provider documentation directs to local block offices
-    isEligibilityExplicit: false,
-    fundingAmount: null, // EXPLICIT UNKNOWN: Varies on land holding acreage
-    isFundingExplicit: false,
-    deadline: null, // Ongoing government scheme with no fixed closing date
-    isDeadlineExplicit: false,
-    status: "unknown",
-    verification: {
-      status: "verified",
-      lastVerifiedAt: "2026-10-24T12:00:00Z",
-      verifiedBy: "admin_verifier_02",
-      evidenceUrl: "https://www.example.gov/agriculture/gazette-notification-49.pdf",
-      notes: "Subsidy tiers depend on district agro-climatic zone; explicit criteria not stated globally.",
-    },
-    correctionHistory: [
-      {
-        id: "corr-opp-4-1",
-        timestamp: "2026-10-25T09:00:00Z",
-        fieldChanged: "fundingAmount",
-        previousValue: "Up to 80% subsidy",
-        newValue: null,
-        reason: "Removed inferred percentage; official guidelines state subsidy is determined individually by regional committee.",
-        recordedBy: "admin_verifier_02",
-      },
-    ],
-    tags: ["Agriculture", "Subsidy", "Water Conservation", "Rural Development"],
-    createdAt: "2026-10-12T08:00:00Z",
-    updatedAt: "2026-10-25T09:00:00Z",
-  },
-  {
-    id: "opp-005",
-    title: "Civic Open Data & Algorithmic Transparency Project Grant",
-    opportunityType: "grant",
-    providerName: "Open Civic Foundation",
-    providerType: "grant_provider",
-    sourceUrl: "https://www.example-foundation.org/grants/civic-data-2026",
-    description: "Grant support for independent journalists, academics, and civic technologists auditing public sector algorithmic risk assessment tools.",
-    eligibilityCriteria: "Non-profit organizations, university research groups, and accredited independent investigative newsrooms.",
-    isEligibilityExplicit: true,
-    fundingAmount: "Grants ranging from $25,000 to $75,000",
-    isFundingExplicit: true,
-    deadline: "2026-10-15T23:59:59Z", // Past date -> Closed
-    isDeadlineExplicit: true,
-    status: "closed",
-    verification: {
-      status: "verified",
-      lastVerifiedAt: "2026-10-28T00:00:00Z",
-      verifiedBy: "system_cron",
-      evidenceUrl: "https://www.example-foundation.org/grants/civic-data-2026",
-      notes: "Deadline elapsed on October 15, 2026. Portal closed for this cycle.",
-    },
-    correctionHistory: [],
-    tags: ["Civic Tech", "Transparency", "Auditing", "Public Interest"],
-    createdAt: "2026-09-01T10:00:00Z",
-    updatedAt: "2026-10-28T00:00:00Z",
-  },
-  {
-    id: "opp-006",
-    title: "Regional STEM Innovation Stipend for High School Graduates",
-    opportunityType: "scholarship",
-    providerName: "Tech Forward Foundation",
-    providerType: "grant_provider",
-    sourceUrl: "https://www.example-techforward.org/stipends/2026",
-    description: "One-time transitional stipend for underrepresented students matriculating into undergraduate electrical engineering or physics degrees.",
-    eligibilityCriteria: "Graduating high school seniors with verified admission to an accredited bachelor's STEM program.",
-    isEligibilityExplicit: true,
-    fundingAmount: "$5,000 single lump-sum grant",
-    isFundingExplicit: true,
-    deadline: "2026-11-04T18:00:00Z", // Within 7 days -> Closing soon
-    isDeadlineExplicit: true,
-    status: "closing_soon",
-    verification: {
-      status: "under_review",
-      lastVerifiedAt: "2026-10-27T16:00:00Z",
-      verifiedBy: "moderator_lead",
-      evidenceUrl: "https://www.example-techforward.org/press/annual-stipends",
-      notes: "Pending confirmation from donor trust concerning final applicant cap.",
-    },
-    correctionHistory: [],
-    tags: ["Scholarship", "High School Seniors", "STEM", "Engineering"],
-    createdAt: "2026-10-21T15:30:00Z",
-    updatedAt: "2026-10-27T16:00:00Z",
-  },
-];
+export function getNewsBySlug(slug: string): NewsItem | undefined {
+  return ALL_SAMPLE_NEWS.find((item) => item.slug === slug);
+}
+
+export function getTechBySlug(slug: string): NewsItem | undefined {
+  return SAMPLE_TECH_DATA.find((item) => item.slug === slug);
+}
+
+export function getOpportunityBySlug(slug: string): Opportunity | undefined {
+  return SAMPLE_OPPORTUNITIES_DATA.find((item) => item.slug === slug);
+}
+
+export function getUrgentOpportunities(): Opportunity[] {
+  return SAMPLE_OPPORTUNITIES_DATA.filter((opp) => opp.status === "closing_soon");
+}
+
+export function searchAllRecords(
+  query: string,
+  typeFilter: "all" | "news" | "technology" | "opportunities" = "all"
+): {
+  news: NewsItem[];
+  technology: NewsItem[];
+  opportunities: Opportunity[];
+} {
+  const q = (query || "").toLowerCase().trim();
+
+  let newsResults: NewsItem[] = [];
+  let techResults: NewsItem[] = [];
+  let oppResults: Opportunity[] = [];
+
+  if (typeFilter === "all" || typeFilter === "news") {
+    newsResults = SAMPLE_NEWS_DATA.filter(
+      (n) =>
+        !q ||
+        n.title.toLowerCase().includes(q) ||
+        (n.excerpt && n.excerpt.toLowerCase().includes(q)) ||
+        n.attribution.sourceName.toLowerCase().includes(q) ||
+        n.tags.some((t) => t.toLowerCase().includes(q))
+    );
+  }
+
+  if (typeFilter === "all" || typeFilter === "technology") {
+    techResults = SAMPLE_TECH_DATA.filter(
+      (t) =>
+        !q ||
+        t.title.toLowerCase().includes(q) ||
+        (t.excerpt && t.excerpt.toLowerCase().includes(q)) ||
+        t.attribution.sourceName.toLowerCase().includes(q) ||
+        t.tags.some((tag) => tag.toLowerCase().includes(q))
+    );
+  }
+
+  if (typeFilter === "all" || typeFilter === "opportunities") {
+    oppResults = SAMPLE_OPPORTUNITIES_DATA.filter(
+      (o) =>
+        !q ||
+        o.title.toLowerCase().includes(q) ||
+        o.description.toLowerCase().includes(q) ||
+        o.providerName.toLowerCase().includes(q) ||
+        o.region.toLowerCase().includes(q) ||
+        o.tags.some((tag) => tag.toLowerCase().includes(q))
+    );
+  }
+
+  return {
+    news: newsResults,
+    technology: techResults,
+    opportunities: oppResults,
+  };
+}

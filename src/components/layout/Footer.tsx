@@ -2,29 +2,38 @@ import React from "react";
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 text-xs text-slate-500 dark:text-slate-400 mt-12">
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 py-8 text-xs mt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <p className="font-semibold text-slate-800 dark:text-slate-200">
-            Intelligence Hub — Opportunity & Intelligence Discovery
-          </p>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-            Strict source attribution, non-rewritten news reporting, and explicit unknown field disclosures.
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-slate-100">Intelligence Hub</span>
+            <span className="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 font-mono">
+              v0.2.0-MVP
+            </span>
+          </div>
+          <p className="text-[11px] text-slate-500 mt-1">
+            Editorial intelligence discovery adhering to strict source attribution, non-rewritten headlines, and verified opportunity registries.
           </p>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
-          <span>Phase 1: Project Foundation</span>
+        <div className="flex flex-wrap items-center gap-4 text-xs">
+          <a href="/news" className="hover:text-slate-200 transition-colors">News</a>
           <span>•</span>
-          <span>Next.js + TypeScript</span>
+          <a href="/technology" className="hover:text-slate-200 transition-colors">AI & Tech</a>
+          <span>•</span>
+          <a href="/opportunities" className="hover:text-slate-200 transition-colors">Opportunities</a>
+          <span>•</span>
+          <a href="/search" className="hover:text-slate-200 transition-colors">Search</a>
+          <span>•</span>
+          <a href="/admin" className="text-slate-500 hover:text-slate-400 transition-colors">Staff Console</a>
           <span>•</span>
           <a
             href="https://github.com/chaudharygautam970-stack/know-it-all"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline text-indigo-600 dark:text-indigo-400 font-medium"
+            className="hover:underline text-indigo-400 font-semibold"
           >
-            GitHub Repository
+            GitHub
           </a>
         </div>
       </div>

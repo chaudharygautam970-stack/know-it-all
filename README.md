@@ -41,57 +41,77 @@ intelligence-hub/
 ├── .gitignore                # Protects secrets and build artifacts
 ├── tests/
 │   ├── domain-rules.test.ts  # Verification & copyright compliance unit tests (9 tests)
-│   └── sample-data.test.ts   # Demonstration dataset schema tests (3 tests)
+│   └── sample-data.test.ts   # Demonstration dataset & slug routing tests (6 tests)
 └── src/
     ├── app/                  # Next.js App Router views
     │   ├── layout.tsx        # Global application shell & navigation
-    │   ├── page.tsx          # Homepage Intelligence Dashboard
-    │   ├── news/page.tsx     # General News & Policy feed
-    │   ├── ai-tech/page.tsx  # AI & Technology feed
-    │   ├── opportunities/page.tsx # Opportunity Discovery feed
-    │   ├── search/page.tsx   # Global search & discovery interface
-    │   ├── saved/page.tsx    # Saved items & personal notes
+    │   ├── page.tsx          # Homepage Overview Dashboard
+    │   ├── news/
+    │   │   ├── page.tsx      # General News & Policy feed with category filters
+    │   │   └── [slug]/page.tsx # News record detail page
+    │   ├── technology/
+    │   │   └── page.tsx      # AI & Technology Radar with domain filters
+    │   ├── ai-tech/
+    │   │   └── page.tsx      # Alias pointing to /technology
+    │   ├── opportunities/
+    │   │   ├── page.tsx      # Opportunity Discovery with type, status & region filters
+    │   │   └── [slug]/page.tsx # Opportunity full specification detail page
+    │   ├── search/page.tsx   # Global unified search & multi-facet filters
+    │   ├── saved/page.tsx    # Saved items, persistent local bookmarks & notes
     │   ├── login/page.tsx    # Authentication entrypoint (Phase 3 Supabase roadmap)
     │   ├── admin/page.tsx    # Administrative verification & moderation console
     │   └── globals.css       # Design tokens, variables, focus rings, accessibility
     ├── components/
     │   ├── layout/
     │   │   ├── DemoBanner.tsx # Persistent demonstration data disclaimer
-    │   │   ├── Navbar.tsx     # Responsive navigation bar & mobile drawer
+    │   │   ├── Navbar.tsx     # Dark graphite primary navigation & mobile drawer
     │   │   └── Footer.tsx     # Transparent attribution & repository links
     │   └── ui/
     │       ├── AttributionNotice.tsx # Original source attribution & license notice
     │       ├── Badge.tsx             # Semantic type & verification badges
+    │       ├── BookmarkButton.tsx    # Interactive bookmark button with local storage sync
     │       ├── CorrectionNotice.tsx  # Transparent audit history of modifications
+    │       ├── EmptyState.tsx        # Reusable empty states with filter reset action
+    │       ├── NewsCard.tsx          # Editorial intelligence card with detail link
+    │       ├── OpportunityCard.tsx   # Structured specification card with status badge
     │       └── StatusIndicator.tsx   # Color-coded opportunity deadline pills
     ├── lib/
-    │   ├── design-system.ts  # Dynamic status calculation & formatting helpers
-    │   ├── validation.ts     # Input validation enforcing copyright & domain rules
-    │   └── sample-data.ts    # Labelled sample demonstration data
+    │   ├── data/
+    │   │   ├── news.ts          # Sample news across India, World, Business, Science, Policy
+    │   │   ├── technology.ts    # Sample technology (LLMs, Agents, Startups, Dev Tools)
+    │   │   └── opportunities.ts # Sample scholarships, internships, grants, schemes
+    │   ├── design-system.ts     # Dynamic status calculation & formatting helpers
+    │   ├── validation.ts        # Input validation enforcing copyright & domain rules
+    │   └── sample-data.ts       # Central aggregator and slug resolution utilities
     ├── types/
-    │   └── index.ts          # Strongly typed domain models & schemas
-    └── server.js             # Standalone local HTTP server & REST API
+    │   └── index.ts             # Strongly typed domain models & schemas
+    └── server.js                # Standalone local HTTP server & REST API
 ```
 
 ---
 
-## 4. Phase 1 Accomplishments
+## 4. Phase 2 Deliverables Completed
 
-- [x] **Project Foundation & TypeScript Setup**: Next.js App Router layout, page components, and types configured.
-- [x] **Design System & Tailwind CSS**: Theme tokens for 4 opportunity statuses (`open`, `closing_soon`, `closed`, `unknown`) and 4 verification tiers (`verified`, `unverified`, `disputed`, `under_review`).
-- [x] **Navigation Shell**: Responsive desktop navbar, quick search bar, and mobile navigation drawer.
-- [x] **Homepage Dashboard**: Key metric cards, urgent closing-soon alert box, and highlights grid.
-- [x] **Placeholder Routes**:
-  - `/news` — General News & Policy Feed
-  - `/ai-tech` — AI & Technology Feed
-  - `/opportunities` — Opportunity Discovery with filter controls
-  - `/search` — Global search & multi-facet filters
-  - `/saved` — Saved items & notes
-  - `/login` — Authentication placeholder explaining Phase 3 Supabase Auth roadmap
-  - `/admin` — Verification & moderation console with audit queue
-- [x] **Sample Demonstration Data**: Realistic, labelled sample datasets with explicit unknown flags.
-- [x] **Automated Test Suites**: 12/12 unit tests passing for copyright rules and sample data schemas.
-- [x] **Operating Instructions**: Comprehensive `AGENTS.md` created.
+- [x] **Primary Navigation**: Dark graphite navigation bar with Overview, News, AI & Technology, Opportunities, Saved Items, and Search; live bookmark counter badge and mobile drawer.
+- [x] **Homepage / Overview Dashboard**:
+  - Section A: Dashboard header with overview title, search input, and quick category shortcuts.
+  - Section B: Featured developments grid with editorial cards and detail page links.
+  - Section C: Latest general and policy news listing with source attribution.
+  - Section D: AI & Technology Radar tracking LLMs, autonomous agents, and compilers.
+  - Section E: Opportunity discovery feed with scholarships, grants, and schemes.
+  - Section F: Deadline awareness box highlighting opportunities closing within 7 days.
+  - Section G: Working view-all navigation links for every section.
+- [x] **News Page (`/news`)**: Real-time keyword search, 7 category filters (India, World, Business, Science, Policy, Environment, All), date sorting, and empty state.
+- [x] **AI & Technology Page (`/technology` & `/ai-tech`)**: Technical intelligence radar with domain filters (LLMs, AI Agents, Dev Tools, Startups, Research), date sorting, and detail links.
+- [x] **Opportunities Page (`/opportunities`)**: Catalog with filters for opportunity types (Scholarships, Internships, Grants, Schemes, Fellowships), deadline status (Open, Closing Soon, Closed, Deadline Not Provided), region, and sorting.
+- [x] **Detail Pages**:
+  - `/news/[slug]` — Full attribution, publisher link, authorized brief excerpt, tags, and transparent correction history.
+  - `/opportunities/[slug]` — Program specification, issuing organization, region, funding value, application deadline pill, eligibility criteria, verification evidence link, and official portal link.
+  - Graceful Not-Found handling for invalid slugs.
+- [x] **Global Search Page (`/search`)**: Cross-cutting search matching titles, excerpts, provider names, and tags, with result-type tabs (All, Opportunities, Technology, News), query preservation from navbar, and clear button.
+- [x] **Saved Items (`/saved`)**: Working bookmarks stored in browser `localStorage`. Pinned items persist across page refreshes, prevent duplicates, and allow personal research notes.
+- [x] **Centralized Sample Data Module**: Structured under `src/lib/data/` with stable unique IDs, slugs, and explicit unknown field disclosures.
+- [x] **Automated Test Suites**: 15/15 unit tests passing.
 
 ---
 
@@ -115,8 +135,8 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser to inter
 ## 6. Phased Roadmap
 
 - [x] **Phase 1: Project Foundation, Routes, & Design System**
-- [ ] **Phase 2: Frontend MVP with Interactive Search & Filters**
-- [ ] **Phase 3: Database, Authentication, and Saved Items (Supabase)**
+- [x] **Phase 2: Frontend MVP with Interactive Search, Filters, Detail Pages & Bookmarks**
+- [ ] **Phase 3: Database, Authentication, and Saved Items (Supabase PostgreSQL & Auth)**
 - [ ] **Phase 4: Permitted Data Ingestion (RSS & APIs)**
 - [ ] **Phase 5: Verification and Administration Workflows**
 - [ ] **Phase 6: Security Review, Testing, and Deployment**
