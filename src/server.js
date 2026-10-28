@@ -496,6 +496,7 @@ function renderFullHtmlPage() {
           <span id="savedCountBadge" class="ml-1 px-1.5 py-0.2 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">0</span>
         </button>
         <button onclick="setView('admin')" class="nav-btn px-3 py-2 rounded-md text-amber-700 hover:bg-amber-50 transition-colors font-semibold" data-view="admin">Admin Console</button>
+        <button onclick="setView('login')" class="ml-1 px-3 py-1.5 bg-slate-900 text-white rounded text-xs font-semibold hover:bg-slate-800 transition-colors" data-view="login">Sign In</button>
       </nav>
 
       <!-- Mobile Menu Toggle -->
@@ -512,6 +513,7 @@ function renderFullHtmlPage() {
       <button onclick="setView('opportunities'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100">Opportunities</button>
       <button onclick="setView('saved'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded hover:bg-slate-100">Saved Items</button>
       <button onclick="setView('admin'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded text-amber-700 hover:bg-amber-50">Admin Console</button>
+      <button onclick="setView('login'); toggleMobileMenu();" class="block w-full text-left py-2 px-3 rounded font-bold text-indigo-600 hover:bg-indigo-50">Sign In (Phase 3 Roadmap)</button>
     </div>
   </header>
 
@@ -724,6 +726,49 @@ function renderFullHtmlPage() {
         <div id="adminAuditLog" class="space-y-2">
           <!-- Injected dynamically -->
         </div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: LOGIN PLACEHOLDER (PHASE 3 ROADMAP) -->
+    <div id="view-login" class="view-panel hidden max-w-md mx-auto py-8 space-y-6">
+      <div class="text-center space-y-1">
+        <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl mx-auto shadow-md">
+          IH
+        </div>
+        <h2 class="text-xl font-bold text-slate-900">Sign In to Intelligence Hub</h2>
+        <p class="text-xs text-slate-500">Synchronize bookmarked opportunities, research alerts, and moderation actions.</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Email Address</label>
+            <input type="email" disabled placeholder="user@example.edu" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed text-xs" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Password</label>
+            <input type="password" disabled placeholder="••••••••••••" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed text-xs" />
+          </div>
+          <button type="button" disabled class="w-full py-2.5 bg-slate-300 text-slate-500 rounded-lg font-semibold text-xs cursor-not-allowed">
+            Sign In (Locked in Phase 1)
+          </button>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-3 text-xs text-indigo-900 space-y-1.5">
+          <div class="font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-500" aria-hidden="true"></span>
+            Phase 3 Architectural Roadmap
+          </div>
+          <p class="text-[11px] leading-relaxed text-indigo-800">
+            Per Phase 1 security requirements, live authentication is scheduled for <strong>Phase 3</strong>. It will utilize Supabase Auth with server-side session cookies, email magic links, and Row Level Security policies.
+          </p>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <button onclick="setView('dashboard')" class="text-xs font-semibold text-indigo-600 hover:underline">
+          &larr; Return to Dashboard
+        </button>
       </div>
     </div>
 
@@ -1331,7 +1376,21 @@ function renderFullHtmlPage() {
       await loadData();
     }
 
-    // Initial load
+    // Initial load: parse URL pathname to set initial view
+    const initialPath = window.location.pathname.replace(/^\\//, '').replace(/\\/$/, '');
+    const pathToViewMap = {
+      '': 'dashboard',
+      'news': 'news',
+      'ai-tech': 'aitech',
+      'opportunities': 'opportunities',
+      'search': 'opportunities',
+      'saved': 'saved',
+      'login': 'login',
+      'admin': 'admin'
+    };
+    if (pathToViewMap[initialPath]) {
+      activeView = pathToViewMap[initialPath];
+    }
     loadData();
   </script>
 </body>
